@@ -107,12 +107,7 @@
                 name="shipping_method"
                 id="shipping_method"
               />
-              <input
-                type="hidden"
-                name="billing_same_as_shipping_address"
-                id="billing_same_as_shipping_address"
-                value="true"
-              />
+
               <div class="step-title">STEP 2: CUSTOMER INFORMATION</div>
               <hr class="mt-2" />
               <div
@@ -445,12 +440,15 @@
                         id="invalid-cvv"
                       ></div>
                       <div class="mt-3">
-                        <input type="checkbox" id="id_same_as_shipping" />
+                        <input
+                          type="checkbox"
+                          name="billing_same_as_shipping_address"
+                          id="billing_same_as_shipping_address"
+                        />
 
                         Shipping address is the same as billing address
                       </div>
 
-                      /* here */
                       <div id="billing-address-fields" style="display: none">
                         <div
                           class="col-12 d-flex justify-content-between align-items-center mb-3 mt-3"
@@ -479,7 +477,7 @@
                               <div class="form-floating">
                                 <input
                                   type="text"
-                                  name="last_name"
+                                  name="billing_last_name"
                                   maxlength="255"
                                   autocomplete="family-name"
                                   class="form-control"
@@ -498,7 +496,7 @@
                                 <input
                                   type="text"
                                   placeholder="Address"
-                                  name="shipping_address_line1"
+                                  name="shipping_address_line1_billing_address"
                                   maxlength="255"
                                   autocomplete="address-line1"
                                   class="form-control"
@@ -517,7 +515,7 @@
                               <div class="form-floating">
                                 <input
                                   type="text"
-                                  name="id_shipping_country_billing_address"
+                                  name="shipping_city_billing_address"
                                   maxlength="255"
                                   autocomplete="address-level2"
                                   class="form-control"
@@ -536,7 +534,7 @@
                               <div class="form-floating">
                                 <select
                                   class="form-select"
-                                  name="shipping_state"
+                                  name="shipping_state_billing_address"
                                   id="id_shipping_state_billing_address"
                                   autocomplete="address-level1"
                                 >
@@ -627,7 +625,7 @@
                                 <input
                                   type="text"
                                   placeholder="ZIP"
-                                  name="shipping_postcode"
+                                  name="shipping_postcode_billing_address"
                                   maxlength="64"
                                   autocomplete="postal-code"
                                   class="form-control"
@@ -643,7 +641,7 @@
                               <div class="form-floating">
                                 <select
                                   class="form-select"
-                                  name="shipping_country"
+                                  name="shipping_country_billing_address"
                                   id="id_shipping_country_billing_address"
                                 >
                                   <option value="US">United States</option>
@@ -754,5 +752,4 @@
   <script type="text/javascript" src="js/campaign.js?v=0.0.1"></script>
   <script type="text/javascript" src="js/checkout.js?v=0.0.1"></script>
   <script type="text/javascript" src="js/form.js?v=0.0.1"></script>
-  <script type="text/javascript" src="js/formBilling.js?v=0.0.1"></script>
 </html>

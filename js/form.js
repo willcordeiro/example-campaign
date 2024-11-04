@@ -1,7 +1,7 @@
 /**
  * Form validation with just-validatate.js
  */
-const checkbox = document.getElementById("id_same_as_shipping");
+const checkbox = document.getElementById("billing_same_as_shipping_address");
 
 function loadCheckboxState() {
   const savedState = localStorage.getItem("checkbox");
@@ -17,15 +17,14 @@ function saveCheckboxState() {
 loadCheckboxState();
 checkbox.addEventListener("change", saveCheckboxState);
 
+const validate = new JustValidate(formEl, {
+  errorFieldCssClass: ["is-invalid"],
+});
+
 document.addEventListener("DOMContentLoaded", () => {
   const billingAddressFields = document.getElementById(
     "billing-address-fields"
   );
-  const formEl = document.querySelector("form");
-
-  const validate = new JustValidate(formEl, {
-    errorFieldCssClass: ["is-invalid"],
-  });
 
   validate
     .addField(
@@ -194,7 +193,7 @@ document.addEventListener("DOMContentLoaded", () => {
       Spreedly.validate();
     });
 
-  toggleBillingAddressFields(); // Initialize visibility on load
+  toggleBillingAddressFields();
 });
 
 /**
@@ -204,7 +203,6 @@ document.addEventListener("DOMContentLoaded", () => {
 const style =
   "color: #212529; font-size: 1rem; line-height: 1.5; font-weight: 400;width: calc(100% - 20px); height: calc(100% - 2px); position: absolute;padding: 0.13rem .75rem";
 
-// set placeholders and styles for iframe fields to make UI style
 Spreedly.on("ready", function () {
   Spreedly.setFieldType("text");
   Spreedly.setPlaceholder("cvv", "CVV");
