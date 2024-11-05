@@ -141,6 +141,7 @@ const createOrder = async () => {
     },
     shipping_method: data.shipping_method,
     success_url: campaign.nextStep(nextURL),
+    attribution: { metadata: {} },
   };
 
   if (!checkbox.checked) {
@@ -155,6 +156,12 @@ const createOrder = async () => {
     };
   }
 
+  if (extendedWarrantyCheckBox.checked) {
+    orderData.attribution.metadata.extended_warranty = true;
+  }
+
+  /*
+  //LINE FOR ADDING THE WARRANTY PRODUCT TO THE REQUEST
   lineArr.forEach((line) => {
     const offer = offers.packages.find(
       (package) => package.id.toString() === line.package_id
@@ -168,8 +175,7 @@ const createOrder = async () => {
       });
     }
   });
-
-  return console.log(extendedWarrantyCheckBox.checked, orderData);
+*/
 
   try {
     const response = await fetch(ordersURL, {
@@ -452,6 +458,13 @@ document.addEventListener("DOMContentLoaded", function (event) {
   const summaryShipPrice = document.querySelector(".selected-shipping-price");
 
   const $offer = document.querySelectorAll(".offer");
+
+  const priceWararnty = firstLineItem.quantity * 2;
+
+  document.querySelector(".selected-product-quantity").textContent = 1;
+
+  document.querySelector(".selected-warranty-price").textContent =
+    campaign.currency.format(priceWararnty);
 
   if ($offer) {
     $offer.forEach(function (el, key) {
