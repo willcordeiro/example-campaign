@@ -390,10 +390,6 @@ const calculateTotal = () => {
   orderTotal.textContent = campaign.currency.format(checkoutTotal);
 };
 
-//
-// Inits & Event Listeners
-//
-
 document.addEventListener("DOMContentLoaded", function (event) {
   renderPackages();
 

@@ -3,20 +3,6 @@
  */
 const checkbox = document.getElementById("billing_same_as_shipping_address");
 
-function loadCheckboxState() {
-  const savedState = localStorage.getItem("checkbox");
-  if (savedState !== null) {
-    checkbox.checked = JSON.parse(savedState);
-  }
-}
-
-function saveCheckboxState() {
-  localStorage.setItem("checkbox", checkbox.checked);
-}
-
-loadCheckboxState();
-checkbox.addEventListener("change", saveCheckboxState);
-
 const validate = new JustValidate(formEl, {
   errorFieldCssClass: ["is-invalid"],
 });
@@ -121,7 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
       validate.removeField("#id_shipping_postcode_billing_address");
     } else {
       billingAddressFields.style.display = "block";
-      localStorage.setItem("chave", "valor");
+
       validate
         .addField(
           "#billing_first_name",
