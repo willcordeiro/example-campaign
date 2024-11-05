@@ -36,6 +36,10 @@ const createUpsell = async () => {
   console.log("create upsell");
   const orderData = {
     lines: upsellLineItem,
+    payment_detail: {
+      payment_gateway: 0,
+      payment_gateway_group: 0,
+    },
   };
 
   btnUpsell.disabled = true;
@@ -50,7 +54,7 @@ const createUpsell = async () => {
     const result = await response.json();
 
     if (!response.ok) {
-      console.log("Something went wrong");
+      console.log("Something went wrong", result, orderData);
       btnUpsell.disabled = false;
       btnUpsell.textContent = btnUpsell.dataset.text;
       return;

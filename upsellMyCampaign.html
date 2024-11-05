@@ -192,8 +192,8 @@
 
     const upsellLineItem = [
       {
-        package_id: 201,
-        quantity: quantityPicker.value,
+        package_id: 8,
+        quantity: Number(quantityPicker.value),
       },
     ];
 
@@ -205,7 +205,7 @@
     }
 
     quantityPicker.addEventListener("change", () => {
-      upsellLineItem[0].quantity = quantityPicker.value;
+      upsellLineItem[0].quantity = Number(quantityPicker.value);
       updateTotalPrice();
     });
   </script>
