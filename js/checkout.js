@@ -114,8 +114,8 @@ const createOrder = async () => {
 
   const orderData = {
     user: {
-      first_name: !checkbox.checked ? data.billing_first_name : data.first_name,
-      last_name: !checkbox.checked ? data.billing_last_name : data.last_name,
+      first_name: data.first_name,
+      last_name: data.last_name,
       email: data.email,
     },
     lines: lineArr,
@@ -123,7 +123,7 @@ const createOrder = async () => {
     use_default_shipping_address: false,
 
     use_default_billing_address: false,
-    billing_same_as_shipping_address: !checkbox.checked,
+    billing_same_as_shipping_address: checkbox.checked,
     payment_detail: {
       payment_method: data.payment_method,
       card_token: data.card_token,
@@ -131,26 +131,28 @@ const createOrder = async () => {
     shipping_address: {
       first_name: !checkbox.checked ? data.billing_first_name : data.first_name,
       last_name: !checkbox.checked ? data.billing_last_name : data.last_name,
-      line1: !checkbox.checked
-        ? data.shipping_address_line1_billing_address
-        : data.shipping_address_line1,
-      line4: !checkbox.checked
-        ? data.shipping_city_billing_address
-        : data.shipping_address_line4,
-      state: !checkbox.checked
-        ? data.shipping_state_billing_address
-        : data.shipping_state,
-      postcode: !checkbox.checked
-        ? data.shipping_postcode_billing_address
-        : data.shipping_postcode,
+      line1: data.shipping_address_line1,
+      line4: data.shipping_address_line4,
+      state: data.shipping_state,
+      postcode: data.shipping_postcode,
       phone_number: data.phone_number,
-      country: !checkbox.checked
-        ? data.shipping_country_billing_address
-        : data.shipping_country,
+      country: data.shipping_country,
     },
     shipping_method: data.shipping_method,
     success_url: campaign.nextStep(nextURL),
   };
+
+  if (!checkbox.checked) {
+    orderData.billing_address = {
+      first_name: data.billing_first_name,
+      last_name: data.billing_last_name,
+      line1: data.shipping_address_line1_billing_address,
+      line4: data.shipping_city_billing_address,
+      state: data.shipping_state_billing_address,
+      postcode: data.shipping_postcode_billing_address,
+      country: data.shipping_country_billing_address,
+    };
+  }
 
   try {
     const response = await fetch(ordersURL, {
