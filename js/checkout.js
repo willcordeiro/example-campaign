@@ -123,7 +123,7 @@ const createOrder = async () => {
     use_default_shipping_address: false,
 
     use_default_billing_address: false,
-    billing_same_as_shipping_address: !checkbox.checked,
+    billing_same_as_shipping_address: checkbox.checked ? false : true,
     payment_detail: {
       payment_method: data.payment_method,
       card_token: data.card_token,

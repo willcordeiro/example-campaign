@@ -101,13 +101,31 @@
                       <span
                         style="color: #000"
                         class="currentPrice fs-1 fw-bold"
-                        >$30.00</span
+                        id="currentPrice"
+                        >$10.00</span
                       >
                     </div>
                   </div>
                   <div class="clearall"></div>
                   <div class="row justify-content-center">
                     <div class="col-11 col-sm-9">
+                      <div class="mb-3 d-grid">
+                        <label for="quantityPicker" class="form-label"
+                          >Quantity:</label
+                        >
+                        <select
+                          id="quantityPicker"
+                          class="form-select mb-3"
+                          aria-label="Quantity picker"
+                        >
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                        </select>
+                      </div>
+
                       <div class="mb-3 d-grid">
                         <button
                           type="button"
@@ -166,15 +184,30 @@
     </footer>
   </body>
   <script type="text/javascript">
-    const publicKey = "HJiDgB1BcNDWx0lJYvP79mqDeRN8d0EVN9DfqYLv";
-    const nextURL = "/upsellMyCampaign.html";
+    const publicKey = "6ojGfy2R1Zzd8cRaatM0bucGjldOayRJs2cS4Or5";
+    const nextURL = "/thank-you.html";
     const refId = sessionStorage.getItem("ref_id");
+    const quantityPicker = document.getElementById("quantityPicker");
+    const totalPriceElement = document.getElementById("currentPrice");
+
     const upsellLineItem = [
       {
-        package_id: 5,
-        quantity: 1,
+        package_id: 201,
+        quantity: quantityPicker.value,
       },
     ];
+
+    function updateTotalPrice() {
+      const quantity = parseInt(quantityPicker.value);
+      const totalPrice = 10.0 * quantity;
+
+      totalPriceElement.textContent = `$${totalPrice.toFixed(2)}`;
+    }
+
+    quantityPicker.addEventListener("change", () => {
+      upsellLineItem[0].quantity = quantityPicker.value;
+      updateTotalPrice();
+    });
   </script>
   <script type="text/javascript" src="js/campaign.js"></script>
   <script type="text/javascript" src="js/upsell.js"></script>
