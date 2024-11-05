@@ -157,25 +157,22 @@ const createOrder = async () => {
   }
 
   if (extendedWarrantyCheckBox.checked) {
+    lineArr.forEach((line) => {
+      const offer = offers.packages.find(
+        (package) => package.id.toString() === line.package_id
+      );
+
+      if (extendedWarrantyCheckBox.checked && offer) {
+        orderData.lines.push({
+          package_id: "7",
+          quantity: offer.quantity,
+          is_upsell: false,
+        });
+      }
+    });
+
     orderData.attribution.metadata.extended_warranty = true;
   }
-
-  /*
-  //LINE FOR ADDING THE WARRANTY PRODUCT TO THE REQUEST
-  lineArr.forEach((line) => {
-    const offer = offers.packages.find(
-      (package) => package.id.toString() === line.package_id
-    );
-
-    if (extendedWarrantyCheckBox.checked && offer) {
-      orderData.lines.push({
-        is_upsell: false,
-        package_id: "7",
-        quantity: offer.quantity,
-      });
-    }
-  });
-*/
 
   try {
     const response = await fetch(ordersURL, {
@@ -421,11 +418,15 @@ const calculateTotal = () => {
   let extendedWarrantyCheckBox = document.getElementById("extendedWarranty");
   let selectedPackage = document.querySelector(".offer.selected");
   let warrantyPriceElement = document.querySelector(".selected-warranty-price");
+  let warrantyQuantityElement = document.querySelector(
+    ".selected-product-quantity"
+  );
   let packagePrice;
   let shippingPrice = selectedPackage.dataset.priceShipping;
   let warrantyPriceValue =
     warrantyPriceElement.textContent || warrantyPriceElement.innerText;
-
+  let warrantyQuantity =
+    warrantyQuantityElement.textContent || warrantyQuantityElement.innerText;
   let numericString = 0;
 
   if (extendedWarrantyCheckBox.checked && warrantyPriceValue != "") {
@@ -433,11 +434,11 @@ const calculateTotal = () => {
   }
 
   packagePrice = selectedPackage.dataset.priceTotal;
-
+  console.log(warrantyQuantity);
   let checkoutTotal =
     parseFloat(packagePrice) +
     parseFloat(shippingPrice) +
-    parseFloat(numericString);
+    parseFloat(numericString) * parseFloat(warrantyQuantity);
 
   let orderTotal = document.querySelector(".order-summary-total-value");
 
@@ -449,7 +450,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
   let firstLineItem = {
     package_id: selectedOfferId,
-    quantity: 1,
+    quantity: 2,
     is_upsell: false,
   };
 
