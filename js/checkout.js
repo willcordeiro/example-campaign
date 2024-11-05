@@ -16,7 +16,7 @@ const cardErrBlock = document.getElementById("payment-error-block");
 
 const ccCheckbox = document.getElementById("id_use_new_card");
 const addCheckbox = document.getElementById("id_same_as_shipping");
-const formCC = document.getElementById("form-cc");
+const formCC = document.getElementById("fo rm-cc");
 const formShip = document.getElementById("form-shipping");
 const formBill = document.getElementById("form-billing");
 const validErrBlock = document.getElementById("validation-error-block");
@@ -104,6 +104,7 @@ const createCart = async () => {
 
 const createOrder = async () => {
   const checkbox = document.getElementById("billing_same_as_shipping_address");
+  const extendedWarrantyCheckBox = document.getElementById("extendedWarranty");
   console.log("create order");
   const formData = new FormData(formEl);
   const data = Object.fromEntries(formData);
@@ -153,6 +154,22 @@ const createOrder = async () => {
       country: data.shipping_country_billing_address,
     };
   }
+
+  lineArr.forEach((line) => {
+    const offer = offers.packages.find(
+      (package) => package.id.toString() === line.package_id
+    );
+
+    if (extendedWarrantyCheckBox.checked && offer) {
+      orderData.lines.push({
+        is_upsell: false,
+        package_id: "7",
+        quantity: offer.quantity,
+      });
+    }
+  });
+
+  return console.log(extendedWarrantyCheckBox.checked, orderData);
 
   try {
     const response = await fetch(ordersURL, {
@@ -378,14 +395,43 @@ const renderPackages = () => {
 /**
  * Calculate totals
  */
+
+function updateWarrantyBlock() {
+  if (extendedWarrantyCheckBox.checked) {
+    warrantyBlock.style.display = "flex";
+  } else {
+    warrantyBlock.style.display = "none";
+  }
+}
+
+const extendedWarrantyCheckBox = document.getElementById("extendedWarranty");
+
+extendedWarrantyCheckBox.addEventListener("change", function () {
+  calculateTotal();
+  updateWarrantyBlock();
+});
+
 const calculateTotal = () => {
+  let extendedWarrantyCheckBox = document.getElementById("extendedWarranty");
   let selectedPackage = document.querySelector(".offer.selected");
+  let warrantyPriceElement = document.querySelector(".selected-warranty-price");
   let packagePrice;
   let shippingPrice = selectedPackage.dataset.priceShipping;
+  let warrantyPriceValue =
+    warrantyPriceElement.textContent || warrantyPriceElement.innerText;
+
+  let numericString = 0;
+
+  if (extendedWarrantyCheckBox.checked && warrantyPriceValue != "") {
+    numericString = warrantyPriceValue.replace("$", "");
+  }
 
   packagePrice = selectedPackage.dataset.priceTotal;
 
-  let checkoutTotal = parseFloat(packagePrice) + parseFloat(shippingPrice);
+  let checkoutTotal =
+    parseFloat(packagePrice) +
+    parseFloat(shippingPrice) +
+    parseFloat(numericString);
 
   let orderTotal = document.querySelector(".order-summary-total-value");
 
@@ -430,6 +476,14 @@ document.addEventListener("DOMContentLoaded", function (event) {
         document.querySelector(".selected-product-price").textContent =
           campaign.currency.format(pPriceEach);
 
+        const priceWararnty = pQuantity * 2;
+
+        document.querySelector(".selected-warranty-price").textContent =
+          campaign.currency.format(priceWararnty);
+
+        document.querySelector(".selected-product-quantity").textContent =
+          pQuantity;
+
         if (pPriceShipping != 0.0) {
           summaryShipPrice.textContent =
             campaign.currency.format(pPriceShipping);
@@ -464,6 +518,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         offer.dataset.name;
       document.querySelector(".selected-product-price").textContent =
         campaign.currency.format(offer.dataset.priceEach);
+
       if (offer.dataset.priceShipping != 0.0) {
         summaryShipPrice.textContent = campaign.currency.format(
           offer.dataset.priceShipping
